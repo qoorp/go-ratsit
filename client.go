@@ -15,19 +15,19 @@ var (
 	ErrInvalidCredentials = errors.New("authenication failed")
 )
 
-// Client issuess request to the ratsit server
 type Ratsit struct {
 	apiKey string
 	client *http.Client
 }
 
+// New creates a new client to interact with the Ratsit API
 func New(key string) (r Ratsit) {
 	r.apiKey = key
 	r.client = new(http.Client)
 	return
 }
 
-// GetPerson returns a person from the database
+// GetPerson returns a person from the database by looking up their unique personnummer
 func (r Ratsit) GetPerson(ssn string, pkg string) (p Person, err error) {
 
 	// TODO: Validate SSN and pkg
@@ -58,13 +58,6 @@ func (r Ratsit) GetPerson(ssn string, pkg string) (p Person, err error) {
 	}
 
 	err = json.Unmarshal(j, &p)
-
-	return
-}
-
-func (r Ratsit) SearchPerson(name string, location string) (p []Person, err error) {
-
-	// req, err := http.NewRequest(http.MethodGet, apiUrl+"/personsok")
 
 	return
 }
