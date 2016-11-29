@@ -18,7 +18,6 @@ package main
 
 import (
     "fmt"
-    "log"
 
     "github.com/qoorp/go-ratsit"
 )
