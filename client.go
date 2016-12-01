@@ -61,3 +61,49 @@ func (r Ratsit) GetPerson(ssn string, pkg string) (p Person, err error) {
 
 	return
 }
+
+var ErrPersonNotFound = errors.New("person with specified name and address not found in records")
+
+// SearchPerson searches the Ratsit database for people with the name and location given in the parameters
+func (r Ratsit) SearchPerson(name string, location string, limit int) (p []PersonBasic, err error) {
+	url := generatePersonSearchURL(name, location, limit)
+
+	req, err := http.NewRequest(http.MethodGet, url, nil)
+	if err != nil {
+		return
+	}
+
+	authorizeRequest(req, r.apiKey, "personsok")
+
+	resp, err := r.client.Do(req)
+	if err != nil {
+		return
+	}
+
+	err = handleResponseError(resp)
+	if err != nil {
+		return
+	}
+
+	j, err := ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return
+	}
+
+	var data SearchResults
+
+	err = json.Unmarshal(j, &data)
+	if err != nil {
+		return
+	}
+
+	if data.ExtendedResult.TotalRecordsFound == 0 {
+		err = ErrPersonNotFound
+		return
+	}
+
+	p = data.ExtendedResult.Records
+
+	return
+}

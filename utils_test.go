@@ -13,6 +13,14 @@ func TestPersonLookupURLGeneration(t *testing.T) {
 	}
 }
 
+func TestPersonSearchURLGeneration(t *testing.T) {
+	expected := apiUrl + "/personsearch?MaxNrRecords=10&Where=Stockholm&Who=Svensson"
+	actual := generatePersonSearchURL("Svensson", "Stockholm", 10)
+	if actual != expected {
+		t.Fail()
+	}
+}
+
 func TestRequestAuthorization(t *testing.T) {
 
 	apikey := "testkey"

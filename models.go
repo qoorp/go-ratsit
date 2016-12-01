@@ -163,3 +163,23 @@ type Person struct {
 		HasRealEstateHolding bool `json:"hasRealEstateHolding"`
 	} `json:"realEstateHolding"`
 }
+
+type SearchResults struct {
+	ExtendedResult struct {
+		RecordsReturned   int           `json:"recordsReturned"`
+		TotalRecordsFound int           `json:"totalRecordsFound"`
+		Records           []PersonBasic `json:"records"`
+	} `json:"extendedResult"`
+}
+
+type PersonBasic struct {
+	Ssn          string `json:"ssn"`
+	FirstName    string `json:"firstName"`
+	GivenName    string `json:"givenName"`
+	LastName     string `json:"lastName"`
+	Street       string `json:"street"`
+	ZipCode      string `json:"zipCode"`
+	City         string `json:"city"`
+	Municipality string `json:"municipality"`
+	Age          int    `json:"age"`
+}
