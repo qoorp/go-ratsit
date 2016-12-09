@@ -8,6 +8,7 @@ import (
 )
 
 const apiUrl = "https://api.ratsit.se/api/v1"
+const PackagePersonadress = "personadress"
 
 var (
 	ErrInvalidInput       = errors.New("invalid input")
@@ -31,6 +32,10 @@ func New(key string) (r Ratsit) {
 func (r Ratsit) GetPerson(ssn string, pkg string) (p Person, err error) {
 
 	// TODO: Validate SSN and pkg
+	err = validateIdentityNumber(ssn)
+	if err != nil {
+		return
+	}
 
 	url := generatePersonLookupURL(ssn)
 
