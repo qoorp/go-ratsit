@@ -2,6 +2,8 @@ package ratsit
 
 // Person is a struct that describes the detailed person information returned by Ratsit
 type Person struct {
+	ResponseCode        string `json:"responseCode"`
+	ResponseMessage     string `json:"responseMessage"`
 	SsnStatus           string `json:"ssnStatus"`
 	RegisteredAtAddress struct {
 		Persons   []Person `json:"persons"`
@@ -182,4 +184,10 @@ type PersonBasic struct {
 	City         string `json:"city"`
 	Municipality string `json:"municipality"`
 	Age          int    `json:"age"`
+}
+
+// HTTPErrorBody holds the body of an error returned by ratsit in the event of an HTTP Error
+type HTTPErrorBody struct {
+	Type    string `json:"type"`
+	Message string `json:"message"`
 }

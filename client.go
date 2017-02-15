@@ -7,7 +7,11 @@ import (
 	"net/http"
 )
 
-const apiUrl = "https://api.ratsit.se/api/v1"
+const (
+	// APIURL defines the Ratsit API URL for use in production
+	APIURL          = "https://api.ratsit.se/api/v1"
+	pkgPersonSearch = "personsok"
+)
 
 var (
 	ErrInvalidInput       = errors.New("invalid input")
@@ -15,6 +19,7 @@ var (
 	ErrInvalidCredentials = errors.New("authenication failed")
 )
 
+// Ratsit is the the client
 type Ratsit struct {
 	apiKey string
 	client *http.Client
@@ -28,82 +33,56 @@ func New(key string) (r Ratsit) {
 }
 
 // GetPerson returns a person from the database by looking up their unique personnummer
-func (r Ratsit) GetPerson(ssn string, pkg string) (p Person, err error) {
-
+func (r Ratsit) GetPerson(ssn string, pkg string) (person Person, err error) {
 	// TODO: Validate SSN and pkg
-
 	url := generatePersonLookupURL(ssn)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return
 	}
-
 	authorizeRequest(req, r.apiKey, pkg)
-
 	resp, err := r.client.Do(req)
 	if err != nil {
 		return
 	}
-
 	err = handleResponseError(resp)
 	if err != nil {
 		return
 	}
-
 	j, err := ioutil.ReadAll(resp.Body)
 	resp.Body.Close()
 	if err != nil {
 		return
 	}
-
-	err = json.Unmarshal(j, &p)
-
+	err = json.Unmarshal(j, &person)
 	return
 }
 
-var ErrPersonNotFound = errors.New("person with specified name and address not found in records")
-
 // SearchPerson searches the Ratsit database for people with the name and location given in the parameters
-func (r Ratsit) SearchPerson(name string, location string, limit int) (p []PersonBasic, err error) {
+func (r Ratsit) SearchPerson(name string, location string, limit int) (personSearchResults SearchResults, err error) {
 	url := generatePersonSearchURL(name, location, limit)
-
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return
 	}
-
-	authorizeRequest(req, r.apiKey, "personsok")
-
+	authorizeRequest(req, r.apiKey, pkgPersonSearch)
 	resp, err := r.client.Do(req)
 	if err != nil {
 		return
 	}
-
 	err = handleResponseError(resp)
 	if err != nil {
 		return
 	}
-
-	j, err := ioutil.ReadAll(resp.Body)
+	jsonBody, err := ioutil.ReadAll(resp.Body)
 	resp.Body.Close()
 	if err != nil {
 		return
 	}
-
-	var data SearchResults
-
-	err = json.Unmarshal(j, &data)
+	err = json.Unmarshal(jsonBody, &personSearchResults)
 	if err != nil {
 		return
 	}
-
-	if data.ExtendedResult.TotalRecordsFound == 0 {
-		err = ErrPersonNotFound
-		return
-	}
-
-	p = data.ExtendedResult.Records
-
 	return
 }

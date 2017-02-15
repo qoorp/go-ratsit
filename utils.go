@@ -9,7 +9,7 @@ import (
 func generatePersonLookupURL(ssn string) (q string) {
 	v := url.Values{}
 	v.Add("SSN", ssn)
-	q = apiUrl + "/personinformation?" + v.Encode()
+	q = APIURL + "/personinformation?" + v.Encode()
 	return
 }
 
@@ -18,7 +18,7 @@ func generatePersonSearchURL(name string, location string, limit int) (q string)
 	v.Add("MaxNrRecords", strconv.Itoa(limit))
 	v.Add("Where", location)
 	v.Add("Who", name)
-	q = apiUrl + "/personsearch?" + v.Encode()
+	q = APIURL + "/personsearch?" + v.Encode()
 	return
 }
 
