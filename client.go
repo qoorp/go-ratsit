@@ -21,21 +21,23 @@ var (
 
 // Ratsit is the the client
 type Ratsit struct {
+	apiURL string
 	apiKey string
 	client *http.Client
 }
 
 // New creates a new client to interact with the Ratsit API
-func New(key string) (r Ratsit) {
+func New(apiURL string, key string) (r Ratsit) {
+	r.apiURL = apiURL
 	r.apiKey = key
 	r.client = new(http.Client)
 	return
 }
 
 // GetPerson returns a person from the database by looking up their unique personnummer
-func (r Ratsit) GetPerson(ssn string, pkg string) (person Person, err error) {
+func (r *Ratsit) GetPerson(ssn string, pkg string) (person Person, err error) {
 	// TODO: Validate SSN and pkg
-	url := generatePersonLookupURL(ssn)
+	url := generatePersonLookupURL(r.apiURL, ssn)
 
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
@@ -60,8 +62,8 @@ func (r Ratsit) GetPerson(ssn string, pkg string) (person Person, err error) {
 }
 
 // SearchPerson searches the Ratsit database for people with the name and location given in the parameters
-func (r Ratsit) SearchPerson(name string, location string, limit int) (personSearchResults SearchResults, err error) {
-	url := generatePersonSearchURL(name, location, limit)
+func (r *Ratsit) SearchPerson(name string, location string, limit int) (personSearchResults SearchResults, err error) {
+	url := generatePersonSearchURL(r.apiURL, name, location, limit)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return

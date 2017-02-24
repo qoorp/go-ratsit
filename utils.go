@@ -6,19 +6,19 @@ import (
 	"strconv"
 )
 
-func generatePersonLookupURL(ssn string) (q string) {
+func generatePersonLookupURL(apiURL string, ssn string) (q string) {
 	v := url.Values{}
 	v.Add("SSN", ssn)
-	q = APIURL + "/personinformation?" + v.Encode()
+	q = apiURL + "/personinformation?" + v.Encode()
 	return
 }
 
-func generatePersonSearchURL(name string, location string, limit int) (q string) {
+func generatePersonSearchURL(apiURL string, name string, location string, limit int) (q string) {
 	v := url.Values{}
 	v.Add("MaxNrRecords", strconv.Itoa(limit))
 	v.Add("Where", location)
 	v.Add("Who", name)
-	q = APIURL + "/personsearch?" + v.Encode()
+	q = apiURL + "/personsearch?" + v.Encode()
 	return
 }
 
