@@ -9,8 +9,9 @@ import (
 
 const (
 	// APIURL defines the Ratsit API URL for use in production
-	APIURL          = "https://api.ratsit.se/api/v1"
-	pkgPersonSearch = "personsok"
+	APIURL           = "https://api.ratsit.se/api/v1"
+	pkgPersonSearch  = "personsok"
+	pkgCompanySearch = "foretagssok"
 )
 
 var (
@@ -62,8 +63,8 @@ func (r *Ratsit) GetPerson(ssn string, pkg string) (person Person, err error) {
 }
 
 // SearchPerson searches the Ratsit database for people with the name and location given in the parameters
-func (r *Ratsit) SearchPerson(name string, location string, limit int) (personSearchResults SearchResults, err error) {
-	url := generatePersonSearchURL(r.apiURL, name, location, limit)
+func (r *Ratsit) SearchPerson(name string, location string, limit int, recordFrom int) (personSearchResults SearchResults, err error) {
+	url := generatePersonSearchURL(r.apiURL, name, location, limit, recordFrom)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return
@@ -83,8 +84,30 @@ func (r *Ratsit) SearchPerson(name string, location string, limit int) (personSe
 		return
 	}
 	err = json.Unmarshal(jsonBody, &personSearchResults)
+	return
+}
+
+// SearchCompany searches the Ratsit database for companies with the name and location given in the parameters
+func (r *Ratsit) SearchCompany(name string, location string, limit int, recordFrom int) (companySearchResults CompanySearchResults, err error) {
+	url := generateCompanySearchURL(r.apiURL, name, location, limit, recordFrom)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return
 	}
+	authorizeRequest(req, r.apiKey, pkgCompanySearch)
+	resp, err := r.client.Do(req)
+	if err != nil {
+		return
+	}
+	err = handleResponseError(resp)
+	if err != nil {
+		return
+	}
+	jsonBody, err := ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return
+	}
+	err = json.Unmarshal(jsonBody, &companySearchResults)
 	return
 }

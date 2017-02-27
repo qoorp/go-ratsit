@@ -186,6 +186,24 @@ type PersonBasic struct {
 	Age          int    `json:"age"`
 }
 
+type CompanySearchResults struct {
+	BasicResult struct {
+		RecordsReturned   int            `json:"recordsReturned"`
+		TotalRecordsFound int            `json:"totalRecordsFound"`
+		Records           []CompanyBasic `json:"records"`
+	} `json:"basicResult"`
+}
+
+type CompanyBasic struct {
+	OrgNr       string `json:"orgNr"`
+	CompanyName string `json:"companyName"`
+	CompanyCode string `json:"companyCode"`
+	Co          string `json:"co"`
+	Street      string `json:"street"`
+	ZipCode     string `json:"zipCode"`
+	City        string `json:"city"`
+}
+
 // HTTPErrorBody holds the body of an error returned by ratsit in the event of an HTTP Error
 type HTTPErrorBody struct {
 	Type    string `json:"type"`

@@ -13,12 +13,23 @@ func generatePersonLookupURL(apiURL string, ssn string) (q string) {
 	return
 }
 
-func generatePersonSearchURL(apiURL string, name string, location string, limit int) (q string) {
+func generatePersonSearchURL(apiURL string, name string, location string, limit int, recordFrom int) (q string) {
 	v := url.Values{}
-	v.Add("MaxNrRecords", strconv.Itoa(limit))
-	v.Add("Where", location)
 	v.Add("Who", name)
+	v.Add("Where", location)
+	v.Add("MaxNrRecords", strconv.Itoa(limit))
+	v.Add("MaxNrRecords", strconv.Itoa(recordFrom))
 	q = apiURL + "/personsearch?" + v.Encode()
+	return
+}
+
+func generateCompanySearchURL(apiURL string, name string, location string, limit int, recordFrom int) (q string) {
+	v := url.Values{}
+	v.Add("Who", name)
+	v.Add("Where", location)
+	v.Add("MaxNrRecords", strconv.Itoa(limit))
+	v.Add("MaxNrRecords", strconv.Itoa(recordFrom))
+	q = apiURL + "/companysearch?" + v.Encode()
 	return
 }
 
