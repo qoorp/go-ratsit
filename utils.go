@@ -1,6 +1,7 @@
 package ratsit
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -16,9 +17,13 @@ func generatePersonLookupURL(apiURL string, ssn string) (q string) {
 func generatePersonSearchURL(apiURL string, name string, location string, limit int, recordFrom int) (q string) {
 	v := url.Values{}
 	v.Add("who", name)
-	v.Add("where", location)
+	if location != "" {
+		v.Add("where", location)
+	}
 	v.Add("maxNrRecords", strconv.Itoa(limit))
-	v.Add("recordFrom", strconv.Itoa(recordFrom))
+	if recordFrom > 0 {
+		v.Add("recordFrom", strconv.Itoa(recordFrom))
+	}
 	q = apiURL + "/personsearch?" + v.Encode()
 	return
 }
@@ -26,16 +31,21 @@ func generatePersonSearchURL(apiURL string, name string, location string, limit 
 func generateCompanySearchURL(apiURL string, name string, location string, limit int, recordFrom int) (q string) {
 	v := url.Values{}
 	v.Add("who", name)
-	v.Add("where", location)
+	if location != "" {
+		v.Add("where", location)
+	}
 	v.Add("maxNrRecords", strconv.Itoa(limit))
-	v.Add("recordFrom", strconv.Itoa(recordFrom))
+	if recordFrom > 0 {
+		v.Add("recordFrom", strconv.Itoa(recordFrom))
+	}
 	q = apiURL + "/companysearch?" + v.Encode()
+	fmt.Println(q)
 	return
 }
 
 func authorizeRequest(r *http.Request, apiKey string, pkg string) {
-	r.Header.Add("Authorization", apiKey)
-	r.Header.Add("package", pkg)
+	r.Header.Add("Authorization", "Basic "+apiKey)
+	r.Header.Add("Package", pkg)
 }
 
 func handleResponseError(r *http.Response) (err error) {

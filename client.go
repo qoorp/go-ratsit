@@ -3,7 +3,9 @@ package ratsit
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -11,13 +13,13 @@ const (
 	// APIURL defines the Ratsit API URL for use in production
 	APIURL           = "https://api.ratsit.se/api/v1"
 	pkgPersonSearch  = "personsok"
-	pkgCompanySearch = "foretagssok"
+	pkgCompanySearch = "foretagsok"
 )
 
 var (
 	ErrInvalidInput       = errors.New("invalid input")
 	ErrInternalServer     = errors.New("internal server error")
-	ErrInvalidCredentials = errors.New("authenication failed")
+	ErrInvalidCredentials = errors.New("authentication failed")
 )
 
 // Ratsit is the the client
@@ -90,13 +92,16 @@ func (r *Ratsit) SearchPerson(name string, location string, limit int, recordFro
 // SearchCompany searches the Ratsit database for companies with the name and location given in the parameters
 func (r *Ratsit) SearchCompany(name string, location string, limit int, recordFrom int) (companySearchResults CompanySearchResults, err error) {
 	url := generateCompanySearchURL(r.apiURL, name, location, limit, recordFrom)
+	fmt.Println("SearchCompany: " + url)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
+		log.Println(err)
 		return
 	}
 	authorizeRequest(req, r.apiKey, pkgCompanySearch)
 	resp, err := r.client.Do(req)
 	if err != nil {
+		log.Println(err)
 		return
 	}
 	err = handleResponseError(resp)
