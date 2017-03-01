@@ -1,13 +1,12 @@
 package ratsit
 
 import (
-	"fmt"
 	"net/http"
 	"net/url"
 	"strconv"
 )
 
-func generatePersonLookupURL(apiURL string, ssn string) (q string) {
+func generatePersonInformationURL(apiURL string, ssn string) (q string) {
 	v := url.Values{}
 	v.Add("SSN", ssn)
 	q = apiURL + "/personinformation?" + v.Encode()
@@ -28,6 +27,13 @@ func generatePersonSearchURL(apiURL string, name string, location string, limit 
 	return
 }
 
+func generateCompanyInformationURL(apiURL string, organizationNumber string) (q string) {
+	v := url.Values{}
+	v.Add("organizationnumber", organizationNumber)
+	q = apiURL + "/companyinformation?" + v.Encode()
+	return
+}
+
 func generateCompanySearchURL(apiURL string, name string, location string, limit int, recordFrom int) (q string) {
 	v := url.Values{}
 	v.Add("who", name)
@@ -39,7 +45,6 @@ func generateCompanySearchURL(apiURL string, name string, location string, limit
 		v.Add("recordFrom", strconv.Itoa(recordFrom))
 	}
 	q = apiURL + "/companysearch?" + v.Encode()
-	fmt.Println(q)
 	return
 }
 
