@@ -15,8 +15,11 @@ const (
 )
 
 var (
-	ErrInvalidInput       = errors.New("invalid input")
-	ErrInternalServer     = errors.New("internal server error")
+	// ErrInvalidInput ...
+	ErrInvalidInput = errors.New("invalid input")
+	// ErrInternalServer ...
+	ErrInternalServer = errors.New("internal server error")
+	// ErrInvalidCredentials ...
 	ErrInvalidCredentials = errors.New("authentication failed")
 )
 

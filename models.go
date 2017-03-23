@@ -166,6 +166,7 @@ type Person struct {
 	} `json:"realEstateHolding"`
 }
 
+// SearchResults ...
 type SearchResults struct {
 	ExtendedResult struct {
 		RecordsReturned   int           `json:"recordsReturned"`
@@ -174,6 +175,7 @@ type SearchResults struct {
 	} `json:"extendedResult"`
 }
 
+// PersonBasic ...
 type PersonBasic struct {
 	Ssn          string `json:"ssn"`
 	FirstName    string `json:"firstName"`
@@ -186,6 +188,7 @@ type PersonBasic struct {
 	Age          int    `json:"age"`
 }
 
+// CompanySearchResults ...
 type CompanySearchResults struct {
 	BasicResult struct {
 		RecordsReturned   int            `json:"recordsReturned"`
@@ -194,6 +197,7 @@ type CompanySearchResults struct {
 	} `json:"basicResult"`
 }
 
+// CompanyBasic ...
 type CompanyBasic struct {
 	OrgNr       string `json:"orgNr"`
 	CompanyName string `json:"companyName"`
