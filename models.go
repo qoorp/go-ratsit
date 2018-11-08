@@ -226,11 +226,13 @@ type CompanyInformationResponse struct {
 		CompanyCode        string `json:"companyCode"`
 		CompanyCodeText    string `json:"companyCodeText"`
 		RegistrationDate   string `json:"registrationDate"`
+		PhoneNumber        string `json:"phoneNumber"`
 	} `json:"basic"`
 	Extended struct {
 		CorporationFoundedDate    string `json:"corporationFoundedDate"`
 		CorporationRegisteredDate string `json:"corporationRegisteredDate"`
 		RegistrationDate          string `json:"registrationDate"`
+		FinancialYear             string `json:"financialYear"`
 		CompanyRegulationDate     string `json:"companyRegulationDate"`
 		CorporateTax              string `json:"corporateTax"`
 		EmployerStatus            string `json:"employerStatus"`
@@ -241,10 +243,54 @@ type CompanyInformationResponse struct {
 		} `json:"registeredSNI"`
 		RegisteredCorporateDescription string `json:"registeredCorporateDescription"`
 		Status                         string `json:"status"`
+		Municipality                   string `json:"municipality"`
+		MunicipalityCode               string `json:"municipalityCode"`
+		County                         string `json:"county"`
+		CountyCode                     string `json:"countyCode"`
 	} `json:"extended"`
+	Remark struct {
+		Status         string `json:"status"`
+		HasRemark      bool   `json:"hasRemark"`
+		LastRemarkDate string `json:"lastRemarkDate"`
+	} `json:"remark"`
+	RemarkExtended struct {
+		Status          string `json:"status"`
+		HasRemark       bool   `json:"hasRemark"`
+		LastRemarkDate  string `json:"lastRemarkDate"`
+		NumberOfRemarks int    `json:"numberOfRemarks"`
+		SumOfRemarks    int    `json:"sumOfRemarks"`
+		Last5Remarks    []struct {
+			Date   string `json:"date"`
+			Amount int    `json:"amount"`
+		} `json:"last5Remarks"`
+		NumberOfApplications int `json:"numberOfApplications"`
+		SumOfApplications    int `json:"sumOfApplications"`
+		Last5Applications    []struct {
+			Date   string `json:"date"`
+			Amount int    `json:"amount"`
+		} `json:"last5Applications"`
+		SumOfDebtBalance int    `json:"sumOfDebtBalance"`
+		DebtBalanceDate  string `json:"debtBalanceDate"`
+		Distraint        bool   `json:"distraint"`
+	} `json:"remarkExtended"`
 	PhoneNumbers struct {
 		PhoneNumbers []string `json:"phoneNumbers"`
 	} `json:"phoneNumbers"`
+	EconomicBasic struct {
+		FinancialPeriod           string `json:"financialPeriod"`
+		Turnover                  int    `json:"turnover"`
+		ResultAfterNetBalance     int    `json:"resultAfterNetBalance"`
+		TurnoverAssets            int    `json:"turnoverAssets"`
+		EstablishmentAssets       int    `json:"establishmentAssets"`
+		PrivateCapital            int    `json:"privateCapital"`
+		UntaxedReservs            int    `json:"untaxedReservs"`
+		BalanceCover              int    `json:"balanceCover"`
+		OperatingProfit           int    `json:"operatingProfit"`
+		NetIncome                 int    `json:"netIncome"`
+		ShareCapital              int    `json:"shareCapital"`
+		TotalLongTermLiabilities  int    `json:"totalLongTermLiabilities"`
+		TotalShortTermLiabilities int    `json:"totalShortTermLiabilities"`
+	} `json:"economicBasic"`
 	EconomicExtended struct {
 		Slutkod                                           string `json:"slutkod"`
 		FinancialPeriod                                   string `json:"financialPeriod"`
@@ -369,6 +415,30 @@ type CompanyInformationResponse struct {
 		BankOverdrafts                                    int    `json:"bankOverdrafts"`
 		NetInterestFinance                                int    `json:"netInterestFinance"`
 	} `json:"economicExtended"`
+	KeyNumbers struct {
+		CashLiquidity       int `json:"cashLiquidity"`
+		Solidity            int `json:"solidity"`
+		Margins             int `json:"margins"`
+		Turnoverchange      int `json:"turnoverchange"`
+		TurnoverPerEmployee int `json:"turnoverPerEmployee"`
+		SalaryPerEmployee   int `json:"salaryPerEmployee"`
+		NumberOfEmployees   int `json:"numberOfEmployees"`
+	} `json:"keyNumbers"`
+	CompanyBoardOfDirectors struct {
+		RegisteredFirmSignee string `json:"registeredFirmSignee"`
+		BoardMembers         []struct {
+			Name         string `json:"name"`
+			FunctionCode string `json:"functionCode"`
+			FunctionText string `json:"functionText"`
+			Ssn          string `json:"ssn"`
+		} `json:"boardMembers"`
+	} `json:"companyBoardOfDirectors"`
+	CompanyGroup struct {
+		MainParentCompany                   string `json:"mainParentCompany"`
+		MainParentCompanyOrganizationNumber string `json:"mainParentCompanyOrganizationNumber"`
+		ParentCompany                       string `json:"parentCompany"`
+		ParentCompanyOrganizationNumber     string `json:"parentCompanyOrganizationNumber"`
+	} `json:"companyGroup"`
 }
 
 // HTTPErrorBody holds the body of an error returned by ratsit in the event of an HTTP Error
