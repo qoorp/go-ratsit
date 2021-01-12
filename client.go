@@ -9,7 +9,7 @@ import (
 
 const (
 	// APIURL defines the Ratsit API URL for use in production
-	APIURL           = "https://api.ratsit.se/api/v1"
+	APIURL           = "https://api.checkbiz.se/api/v1"
 	pkgPersonSearch  = "personsok"
 	pkgCompanySearch = "foretagsok"
 )
